@@ -1,26 +1,27 @@
 #include <Arduino.h>
 #include <SPI.h>
-#include <ESP8266WiFi.h>
 
-char ssid[] = "";
-char pass[] = "";
+#include "oled.hpp"
+#include "wifi.hpp"
+#include "api_client.hpp"
+#include "gpio.hpp"
 
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(9600);
+    Serial.print("Booting...\n");
 
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(ssid, pass);
-
-    while (WiFi.status() != WL_CONNECTED)
-    {
-        delay(1000);
-        Serial.print("Waiting for WLAN connection...");
-    }
+    // oled_setup();
+    wifi_setup();
+    api_client_setup();
 }
 
 void loop()
 {
-    Serial.print("Ready...");
+    // oled_loop();
+    wifi_loop();
+
+    api_client_perform_request();
+
     delay(1000);
 }
