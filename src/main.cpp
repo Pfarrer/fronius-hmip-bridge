@@ -6,22 +6,26 @@
 #include "api_client.hpp"
 #include "gpio.hpp"
 
+int loop_counter = 0;
+
 void setup()
 {
     Serial.begin(9600);
     Serial.print("Booting...\n");
+    delay(100);
 
-    // oled_setup();
+    oled_setup();
     wifi_setup();
     api_client_setup();
 }
 
 void loop()
 {
-    // oled_loop();
-    wifi_loop();
+    if (loop_counter++ % 10 == 0) {
+        wifi_loop();
+        api_client_loop();
+    }
 
-    api_client_perform_request();
-
-    delay(1000);
+    oled_loop();
+    delay(100);
 }
