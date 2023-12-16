@@ -3,4 +3,6 @@
 #define WIFI_SSID ""
 #define WIFI_PASS ""
 
+#define EXCESS_POWER_THRESHOLD 2000 // Watts
+
 #define FRONIUS_API_URL ""

@@ -12,12 +12,14 @@ String host = "192.168.0.215";
 uint16_t port = 8080;
 String uri = "/solar_api/v1/GetPowerFlowRealtimeData.fcgi";
 
+int powerToGrid = 0;
+
 void api_client_setup()
 {
-        Serial.println("api_client_setup done");
+    Serial.println("api_client_setup done");
 }
 
-float api_client_loop()
+void api_client_loop()
 {
     WiFiClient client;
     HTTPClient http;
@@ -34,11 +36,11 @@ float api_client_loop()
 
     // Read values
     int powerFromGrid = doc["Body"]["Data"]["Site"]["P_Grid"].as<int>();
-    snprintf(OLED_PTG_STATUS, OLED_STATUS_LENGTH, "%d", -powerFromGrid);
+    powerToGrid = -powerFromGrid;
+    snprintf(OLED_PTG_STATUS, OLED_STATUS_LENGTH, "%d W", powerToGrid);
 
     // Disconnect
     http.end();
 
     Serial.println("api_client_loop done");
-    return powerFromGrid;
 }
