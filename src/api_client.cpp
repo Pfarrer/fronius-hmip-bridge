@@ -8,10 +8,6 @@
 WiFiClient client;
 HTTPClient http;
 
-String host = "192.168.0.215";
-uint16_t port = 8080;
-String uri = "/solar_api/v1/GetPowerFlowRealtimeData.fcgi";
-
 int powerToGrid = 0;
 
 void api_client_setup()
