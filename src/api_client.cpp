@@ -8,7 +8,10 @@
 WiFiClient client;
 HTTPClient http;
 
-int powerToGrid = 0;
+int batteryChargePower = 0;
+int soc = 0;
+
+int lastSuccessfulResponse = 0;
 
 void api_client_setup()
 {
@@ -26,14 +29,29 @@ void api_client_loop()
     int http_code = http.GET();
     snprintf(OLED_HTTP_STATUS, OLED_STATUS_LENGTH, "%d", http_code);
 
-    // Parse response
-    DynamicJsonDocument doc(2048);
-    deserializeJson(doc, http.getStream());
+    if (http_code == 200)
+    {
+        lastSuccessfulResponse = 0;
 
-    // Read values
-    int powerFromGrid = doc["Body"]["Data"]["Site"]["P_Grid"].as<int>();
-    powerToGrid = -powerFromGrid;
-    snprintf(OLED_PTG_STATUS, OLED_STATUS_LENGTH, "%d W", powerToGrid);
+        // Parse response
+        DynamicJsonDocument doc(2048);
+        deserializeJson(doc, http.getStream());
+
+        // Read values
+        batteryChargePower = -1 * doc["Body"]["Data"]["Site"]["P_Akku"].as<int>();
+        soc = doc["Body"]["Data"]["Inverters"]["1"]["SOC"].as<int>();    
+        
+        snprintf(OLED_BATT_STATUS, OLED_STATUS_LENGTH, "%d%% %+dW", soc, batteryChargePower);
+    }
+    else if (lastSuccessfulResponse == 10)
+    {
+        soc = 0;
+        batteryChargePower = 0;
+    }
+    else
+    {
+        lastSuccessfulResponse++;
+    }
 
     // Disconnect
     http.end();
