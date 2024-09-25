@@ -28,7 +28,7 @@ void gpio_setup()
 void gpio_loop()
 {
     if (soc >= TURN_ON_SOC_GTE
-        && batteryChargePower > BATTERY_CHARGE_THRESHOLD_GT
+        && (batteryChargePower + gridInfeedPower) > EXCESS_POWER_THRESHOLD_GT
         && state < 2)
     {
         // Criterias are fullfiled to active one more consumer

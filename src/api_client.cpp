@@ -9,6 +9,7 @@ WiFiClient client;
 HTTPClient http;
 
 int batteryChargePower = 0;
+int gridInfeedPower = 0;
 int soc = 0;
 
 int lastSuccessfulResponse = 0;
@@ -39,14 +40,16 @@ void api_client_loop()
 
         // Read values
         batteryChargePower = -1 * doc["Body"]["Data"]["Site"]["P_Akku"].as<int>();
-        soc = doc["Body"]["Data"]["Inverters"]["1"]["SOC"].as<int>();    
+        gridInfeedPower = -1 * doc["Body"]["Data"]["Site"]["P_Grid"].as<int>();
+        soc = doc["Body"]["Data"]["Inverters"]["1"]["SOC"].as<int>();
         
-        snprintf(OLED_BATT_STATUS, OLED_STATUS_LENGTH, "%d%% %+dW", soc, batteryChargePower);
+        snprintf(OLED_BATT_STATUS, OLED_STATUS_LENGTH, "%d%% & %+dW", soc, batteryChargePower + gridInfeedPower);
     }
     else if (lastSuccessfulResponse == 10)
     {
         soc = 0;
         batteryChargePower = 0;
+        gridInfeedPower = 0;
     }
     else
     {
