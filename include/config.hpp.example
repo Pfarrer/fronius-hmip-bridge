@@ -4,9 +4,9 @@
 #define WIFI_PASS ""
 
 #define TURN_ON_SOC_GTE 97
-#define TURN_OFF_SOC_GTE 95
+#define TURN_OFF_SOC_LT 95
 
-#define BATTERY_CHARGE_THRESHOLD_1_GT 1000 // Watt
-#define BATTERY_CHARGE_THRESHOLD_2_GT 1000 // Watt
+#define EXCESS_POWER_THRESHOLD_GT 1000 // Watt
+#define UPDATE_INTERVAL_SEC 60
 
-#define FRONIUS_API_URL ""
+#define FRONIUS_API_URL "http://[FRONIUS-IP-HERE]/solar_api/v1/GetPowerFlowRealtimeData.fcgi"
